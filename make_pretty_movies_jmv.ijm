@@ -1,4 +1,4 @@
-//macro to open cropped files, separate channels and set LUTs, combine and save as an AVI movie file.
+//macro to open cropped files, separate channels and set LUTs, combine and save as an AVI movie file. Testing.
 
 #@ File (label="Choose directory containing images to analyze", style="directory") directory
 #@ File (label="Choose image to setup LUTs and channels") srcFile
