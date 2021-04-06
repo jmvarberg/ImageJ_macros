@@ -13,7 +13,7 @@ print(points, rad, sims, zscale);
 //simulate the NPCs and save out re-scaled tiff images to be tracked
 setBatchMode(true);
 for (i = 0; i < sims; i++) {
-	run("simulate npcs jru v1", "sphere_radius="+rad+" min_npc_dist=100 number_of_points="+points+" psf_fwhm=100.00000 psf_z_fwhm=300.00000 pixel_size=40.00000 max_intensity=100.00000 add_noise read_noise_stdev=40.00000 gain=50.00000 spb_max_intensity=100.00000 spb_separation=180.00000");
+	run("simulate npcs jru v1", "sphere_radius="+rad+" min_npc_dist=100 number_of_points="+points+" psf_fwhm=100.00000 psf_z_fwhm=300.00000 pixel_size="+pix+" max_intensity=100.00000 add_noise read_noise_stdev=40.00000 gain=50.00000 spb_max_intensity=100.00000 spb_separation=180.00000");
 	close("Simulated Coordinates: Npcs");
 	close("Sphere Positions Image: Npcs");
 	close("Sphere Positions: Npcs");
