@@ -20,23 +20,23 @@ for (i=0; i < sims; i++) {
 	close("Sphere Positions: SPB");
 	close("Simulated Coordinates: SPB");
 	selectWindow("Sim NPCs");
-	
-	//rescale z dimension to match data off the OMX. Add SPB point ROIs and save out TIFF with ROI overlay.
-	run("Scale...", "x=1.0 y=1.0 z="+zscale+" width=128 height=128 depth=41 interpolation=Bilinear average process create");
 	newname= "Simulated_NPCs_SPA_SIM_"+points+"_points_radius_"+rad+"_nucleus_"+(i+1);
-	x2=64;
-	y2=64;
-	x1=64;
-	y1=59.549786;
-	Stack.setSlice(30);
-	makePoint(x1, y1);
-	roiManager("add");
-	makePoint(x2, y2);
-	roiManager("add");
-	roiManager("Show All");
-	save(outdir+File.separator+newname+".tif"); close();
-	close("Sim NPCs");
-	roiManager("reset");
+	run("Duplicate...", "duplicate slices=94");
+	saveAs("Tiff...", outdir+File.separator+newname+".tif");
+	run("Close All");
 }
 
+filelist=getFileList(outdir);
+for (i = 0; i < lengthOf(filelist); i++) {
+    if (endsWith(filelist[i], ".tif")) { 
+        open(outdir + File.separator + filelist[i]);
+    } 
+}
+run("merge all stacks jru v1");
+saveAs("Tiff...", outdir+File.separator+"Simulated_NPCs_SPA_SIM_"+points+"_points_radius_"+rad+"_n="+sims+"_merged.tif");
+run("stack statistics jru v2", "statistic=Avg");
+saveAs("Tiff...", outdir+File.separator+"Simulated_NPCs_SPA_SIM_"+points+"_points_radius_"+rad+"_n="+sims+"_merged_avg.tif");
+run("Close All");
 
+//generate averaged images and plot profiles using macro
+runMacro("spa_sim_tiffs_plots_batch_jmv.ijm");
