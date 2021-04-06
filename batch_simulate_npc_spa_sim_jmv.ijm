@@ -36,6 +36,7 @@ for (i=0; i < sims; i++) {
 	roiManager("Show All");
 	save(outdir+File.separator+newname+".tif"); close();
 	close("Sim NPCs");
+	roiManager("reset");
 }
 
 
