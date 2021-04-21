@@ -18,19 +18,13 @@ waitForUser("Select NPC channel");
 Stack.getPosition(channel, slice, frame);
 npcs=channel;
 
-Stack.getDimensions(width, height, channels, slices, frames); //get x/y coordinates for center point of image to calculate distances to identified traj spots later.
-centx = width/2;
-centy = height/2;
-
-print(centx,centy);
-
 //Duplicate out NPC channel full image stack for doing normalizations.
 run("Duplicate...", "duplicate channels="+npcs);
 rename("NPC");
-run("normalize stack jru v1", "normalization=Max multiplication=1.00000");
+run("normalize stack jru v1", "normalization=Max multiplication=1.00000"); //normalize each slice individually to avoid issues for different slices/nuclei having different intensities.
 rename("normalized");
 
-//select normalized stack. go through each slice, duplicate out, run track max not max to find spots and add to ROI manager.
+//for normalized stack, go through each slice, duplicate out, run track max not max to find spots and add to ROI manager.
 nSlices
 setBatchMode(true)
 for (i = 1; i <= nSlices; i++) {
@@ -41,10 +35,16 @@ for (i = 1; i <= nSlices; i++) {
     run("close table jru v1", "table=[Traj Data]");
 
     //run measure trajectories to set a circle of radius 2 pixels (80nm; 160 nm diameter) and measure average intensities of those spots. 
-    run("measure trajectories jru v1", "image=dupslice trajectory=Trajectories statistic=Avg measure_radius=2 measure_radius_z=5.00000 z_ratio=1.00000 circ_radius=1.00000 circ_stat=Min");
-    run("rename table jru v1", "windows=[Traj Stats] new="+dupname+"_slice_"+i);
-    close("Trajectories");
-    close("dupslice");  
+    if(isOpen("Trajectories")) {
+    	run("measure trajectories jru v1", "image=dupslice trajectory=Trajectories statistic=Avg measure_radius=2 measure_radius_z=5.00000 z_ratio=1.00000 circ_radius=1.00000 circ_stat=Min");
+    	run("rename table jru v1", "windows=[Traj Stats] new="+dupname+"_slice_"+i);
+    	close("Trajectories");
+    	close("dupslice");  
+    }
+    else {
+    	close("dupslice");
+    }
+    
 }
 
 run("combine all tables jru v1", "add_titles close");
