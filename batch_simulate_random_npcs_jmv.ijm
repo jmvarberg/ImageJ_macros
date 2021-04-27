@@ -14,6 +14,10 @@ print(points, rad, sims, zscale);
 setBatchMode(true);
 for (i = 0; i < sims; i++) {
 	run("simulate npcs jru v1", "sphere_radius="+rad+" min_npc_dist=100 number_of_points="+points+" psf_fwhm=100.00000 psf_z_fwhm=300.00000 pixel_size="+pix+" max_intensity=100.00000 add_noise read_noise_stdev=40.00000 gain=50.00000 spb_max_intensity=100.00000 spb_separation=180.00000");
+	simname="Simulated_"+points+"_NPCs_"+rad+"_nm_radius_sim_"+(i+1)+".csv";
+	run("rename table jru v1", "windows=[Simulated Coordinates: Npcs] new=["+simname+"]");
+	run("export table jru v1", "table1=["+simname+"] format=xls(tab) save=["+outdir+File.separator+simname+"]");
+	run("close table jru v1", "table=["+simname+"]");
 	close("Simulated Coordinates: Npcs");
 	close("Sphere Positions Image: Npcs");
 	close("Sphere Positions: Npcs");
