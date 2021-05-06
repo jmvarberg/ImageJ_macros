@@ -134,7 +134,11 @@ for (i = 0; i < images.length; i++) {
 	rename("C1_" + dupname + "_original.tif");
 	name=getTitle();
 	saveAs("Tiff", tifout+name);
-	run("Enhance Contrast", "saturated=0.35");
+	getStatistics(area, mean, min, max, std, histogram);
+	maxInt = max;
+	thresh = 0.25 * maxInt;
+	print("Max: ",maxInt, "Min: ",thresh);
+	setMinAndMax(thresh, maxInt);
 	if(SPBChannel==1) {
 		run(SPBcolor);
 		}
